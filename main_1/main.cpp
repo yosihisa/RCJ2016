@@ -1,22 +1,22 @@
 #include "header.h"
 #include <math.h>
 
-#define GOAL 0 //æ”»ã‚ã‚‹GOALã®æ–¹å‘
-#define LINE 20 //ãƒ©ã‚¤ãƒ³ã‚»ãƒ³ã‚µãƒ¼ã€€é–¾å€¤
+#define GOAL 0 //U‚ß‚éGOAL‚Ì•ûŒü
+#define LINE 20 //ƒ‰ƒCƒ“ƒZƒ“ƒT[@è‡’l
 
 char line[3];
 
-//SPIé€šä¿¡
+//SPI’ÊM
  unsigned char spi( unsigned char data){
 	 SPDR = data;
-	 while(!(SPSR & (1<<SPIF))); //é€å—ä¿¡å¾…æ©Ÿ
+	 while(!(SPSR & (1<<SPIF))); //‘—óM‘Ò‹@
 	 _delay_us(10);
 	 SPDR = data;
-	 while(!(SPSR & (1<<SPIF))); //é€å—ä¿¡å¾…æ©Ÿ
+	 while(!(SPSR & (1<<SPIF))); //‘—óM‘Ò‹@
 	 return SPDR;
  }
  
- //ã‚¢ãƒŠãƒ­ã‚°
+ //ƒAƒiƒƒO
  char line_ad(){
 	 ADMUX  = 0b00100000;
 	 ADCSRA = 0b11010110;
@@ -42,30 +42,30 @@ char line[3];
   
  int main(void){
 	
-	//å…¥å‡ºåŠ›è¨­å®š
-	DDRD =0b11111100; //ãƒ¢ãƒ¼ã‚¿ãƒ¼
-	DDRB =0b00101100; //SPIãƒ»åˆ‡æ›¿SW
-	PORTB=0b00000001; //åˆ‡æ›¿SWãƒ—ãƒ«ã‚¢ãƒƒãƒ—
+	//“üo—Íİ’è
+	DDRD =0b11111100; //ƒ‚[ƒ^[
+	DDRB =0b00101100; //SPIEØ‘ÖSW
+	PORTB=0b00000001; //Ø‘ÖSWƒvƒ‹ƒAƒbƒv
 
 	
-	//SPIè¨­å®š
+	//SPIİ’è
 	SPCR =0b01010001;
 	SPSR|=0b00000000;
 	
-	//PWMè¨­å®š
+	//PWMİ’è
 	TCCR0A=0b10100001;
 	TCCR0B=0b00000100;
 	TCCR2A=0b00100001;
 	TCCR2B=0b00000101;
 	
 	//USART
-	UBRR0 = 129;			//ãƒœãƒ¼ãƒ¬ãƒ¼ãƒˆ9600 @20MHz
-	UCSR0A = 0b00000000;	//å—ä¿¡ã™ã‚‹ã¨10000000ã«ãªã‚‹ é€ä¿¡æœ‰åŠ¹ã«ãªã‚‹ã¨00100000ã«ãªã‚‹
-	UCSR0B = 0b00011000;	//é€å—ä¿¡æœ‰åŠ¹
-	UCSR0C = 0b00000110;	//ãƒ‡ãƒ¼ã‚¿8bit éåŒæœŸ,ãƒ‘ãƒªãƒ†ã‚£ãªã— Stop 1bit
+	UBRR0 = 129;			//ƒ{[ƒŒ[ƒg9600 @20MHz
+	UCSR0A = 0b00000000;	//óM‚·‚é‚Æ10000000‚É‚È‚é ‘—M—LŒø‚É‚È‚é‚Æ00100000‚É‚È‚é
+	UCSR0B = 0b00011000;	//‘—óM—LŒø
+	UCSR0C = 0b00000110;	//ƒf[ƒ^8bit ”ñ“¯Šú,ƒpƒŠƒeƒB‚È‚µ Stop 1bit
 	
-	sio_init(9600,8);    // SIOè¨­å®š
-	sei(); // å…¨å‰²ã‚Šè¾¼ã¿è¨±å¯
+	sio_init(9600,8);    // SIOİ’è
+	sei(); // ‘SŠ„‚è‚İ‹–‰Â
 
 	//char str[32];
 	//sendString("Hello! UART world\n");
@@ -122,18 +122,18 @@ char line[3];
 	ary[2] = atoi(strtok(NULL,","));
 	ary[3] = atoi(strtok(NULL,","));
 	
-	//é éš”åˆ¶å¾¡
+	//‰“Šu§Œä
 	if(ary[0]==10)motor(ary[1],ary[2],ary[3]);
 	
-	sprintf(str, "%d,%d,%d,,%d,", raw_x,raw_y,raw_z,arg);//æ–¹ä½
+	sprintf(str, "%d,%d,%d,,%d,", raw_x,raw_y,raw_z,arg);//•ûˆÊ
 	sendString(str);
-	sprintf(str, ",%d,%d,%d,%d,%d,%d,",ir[0],ir[1],ir[2],ir[3],ir[4],ir[5]);//ãƒœãƒ¼ãƒ«
-	//sprintf(str, ",%d,%d,%d,%d,%d,%d,",ary[0],ary[1],ary[2],ary[3],ir[4],ir[5]);//ãƒœãƒ¼ãƒ«
+	sprintf(str, ",%d,%d,%d,%d,%d,%d,",ir[0],ir[1],ir[2],ir[3],ir[4],ir[5]);//ƒ{[ƒ‹
+	//sprintf(str, ",%d,%d,%d,%d,%d,%d,",ary[0],ary[1],ary[2],ary[3],ir[4],ir[5]);//ƒ{[ƒ‹
 	
 	sendString(str);
-	sprintf(str, ",%d,%d,%d,",line[0],line[1],line[2]);//ãƒ©ã‚¤ãƒ³
+	sprintf(str, ",%d,%d,%d,",line[0],line[1],line[2]);//ƒ‰ƒCƒ“
 	sendString(str);
-	sprintf(str, ",%d,%d,%d,%d,",urm[0],urm[1],urm[2],urm[3]);//è¶…éŸ³æ³¢
+	sprintf(str, ",%d,%d,%d,%d,",urm[0],urm[1],urm[2],urm[3]);//’´‰¹”g
 	sendString(str);
 	sendString(usart_string);
 	sendString("\n");
@@ -168,11 +168,11 @@ char line[3];
 	urm[2] = spi(URM_B);
 	urm[3] = spi(URM_R);
 	
-	//IRã®æœ€å¤§å€¤ã‚’æ¢ç´¢
+	//IR‚ÌÅ‘å’l‚ğ’Tõ
 	for(int i=0;i<6;i++){
 		if(ir[i]>ir[ir_max])ir_max=i;
 	}
-	//2ç•ªç›®ã‚’æ¢ç´¢
+	//2”Ô–Ú‚ğ’Tõ
 	for(int i=0;i<6;i++){
 		if(i!=ir_max && ir[i]>ir[ir_max2])ir_max2=i;
 	}
@@ -190,7 +190,7 @@ char line[3];
 					speed=225;
 					cor = 180;
 				}
-				int x_all,x_lp;//å·¦å³ã®ä½ç½®ã€€å·¦å³ã®å’Œ,å’Œã«å¯¾ã™ã‚‹å·¦ã®å‰²åˆ
+				int x_all,x_lp;//¶‰E‚ÌˆÊ’u@¶‰E‚Ì˜a,˜a‚É‘Î‚·‚é¶‚ÌŠ„‡
 				x_all = urm[1]+urm[3];
 				if(x_all>120){
 					x_lp = (urm[1]*100)/x_all;
@@ -209,7 +209,7 @@ char line[3];
 				if(ir[2]>120)cor = 30;
 				else         cor = 0;
 				break;
-			case 3://çœŸå¾Œã‚
+			case 3://^Œã‚ë
 				if(ir_max2 ==2)cor = 330;
 				if(ir_max2 ==4)cor = 30;
 				speed=200;
@@ -256,7 +256,7 @@ char line[3];
  }
  
  
- //ãƒ©ã‚¤ãƒ³ã‚’å‡ºãŸå ´åˆ
+ //ƒ‰ƒCƒ“‚ğo‚½ê‡
  char line_check(){
 	//line_ad();
 	if(line[L_F] < LINE){
